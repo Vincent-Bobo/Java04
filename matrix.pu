@@ -1,0 +1,89 @@
+@startuml
+class Creature {
+  +void moveTo(int xPos, int yPos)
+}
+
+interface Sorter {
+  +void load(T[][] elements)
+  +void sort()
+  +String getPlan()
+}
+
+class SelectSorter {
+  -T[][] a
+  +void load(T[][] elements)
+  +void swap(int i, int j, int x, int y)
+  +void sort()
+  +String getPlan()
+}
+
+class Monster {
+  -int rank
+  +int compareTo(Monster obj)
+  +void swap(Monster another)
+  +int getrank()
+}
+
+class Thing {
+  -World world
+  -Tile<? extends Thing> tile;
+  -Color color
+  -char glyph
+  +int getX()
+  +int getY()
+  +void setTile(Tile<? extends Thing> tile) 
+  +Color getColor() {
+  +char getGlyph()
+}
+
+class Tile{
+  -T thing;
+  -int xPos
+  -int yPos;
+  +T getThing()
+  +void setThing(T thing) 
+  +int getxPos()
+  +void setxPos(int xPos)
+  +int getyPos()
+  +void setyPos(int yPos)
+}
+
+class Wall{
+
+}
+
+class Floor{
+
+}
+class World{
+  -Tile<Thing>[][] tiles
+  +Thing get(int x, int y)
+  +void put(Thing t, int x, int y)
+}
+
+interface Screen{
+  +void displayOutput(AsciiPanel terminal)
+  +Screen respondToUserInput(KeyEvent key)
+}
+
+class WorldScreen{
+  -World world
+  -Monster[][] monsMatrix
+  -String[] sortSteps
+  +void shufle(Monster[][] mat)
+  +String[] parsePlan(String plan)
+  +Monster getMonsByRank(Monster[][] mat, int rank)
+  +void displayOutput(AsciiPanel terminal)
+  +Screen respondToUserInput(KeyEvent key)
+}
+SelectSorter ..|> Sorter
+Monster ..|> Creature
+Creature ..|> Thing
+Wall ..|> Thing
+Floor ..|> Thing
+Thing -->Tile:附属
+WorldScreen ..|>Screen
+Tile --> World: 被包含
+World --> WorldScreen :被包含
+Sorter --> WorldScreen :被调用
+@enduml
